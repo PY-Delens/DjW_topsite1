@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+
+{% load wagtailcore_tags wagtailimages_tags %}
+{% comment %}  see : there are 2 load's ; therewas only the 1st {% endcomment %}
+
+{% block body_class %}template-blogpage{% endblock %}
+
+{% block content %}
+    <h1>{{ page.title }}</h1>
+    <p class="meta">{{ page.date }}</p>
+
+    <div class="intro">{{ page.intro }}</div>
+
+    {{ page.body|richtext }}
+    
+    {% for item in page.gallery_images.all %}
+        <div style="float: left; margin: 10px">
+            {% image item.image fill-320x240 %}
+            <p>{{ item.caption }}</p>
+        </div>
+    {% endfor %}
+
+    <br/>
+    
+    <hr/>
+
+    <div class="tags">
+        <h3>Tags</h3>
+        {% if page.tags.all.count %}
+            {% for tag in page.tags.all %}
+                <a href="{% slugurl 'tags' %}?tag={{ tag }}"><button type="button">{{ tag }}</button></a>
+            {% endfor %}
+        {% else %}
+            No tags
+        {% endif %}
+    </div>
+
+    <p><a href="{{ page.get_parent.url }}">Return to blog</a></p>
+
+{% endblock %}
+
+
