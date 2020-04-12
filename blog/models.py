@@ -33,6 +33,11 @@ class BlogPage(Page):
     intro = models.CharField(max_length=250)
     body = RichTextField(blank=True)
     tags = ClusterTaggableManager(through=BlogPageTag, blank=True)
+    author = models.ForeignKey(
+        'auth.user',
+        # on_delete=models.PROTECT       #   .SET_NULL,      #SINON TRY "=models.PROTECT"
+        on_delete=models.SET_NULL, null=True
+    )
 
 
     def main_image(self):           # method

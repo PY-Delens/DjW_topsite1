@@ -33,7 +33,11 @@ class BlogPage(Page):
     intro = models.CharField(max_length=250)
     body = RichTextField(blank=True)
     tags = ClusterTaggableManager(through=BlogPageTag, blank=True)
-
+    author = models.ForeignKey(
+        'auth.user',
+        # on_delete=models.PROTECT       #   .SET_NULL,      #SINON TRY "=models.PROTECT"
+        on_delete=models.CASCADE, null=True
+    )
 
 
     def main_image(self):           # method
@@ -84,14 +88,15 @@ class BlogTagIndexPage(Page):
         return context
 
 # here another unused model, but debugged ok, for introducing author field, I copy in BlogPage
-""" class Post(models.Model) :
+class Post(models.Model) :
     title = models.CharField(max_length=200)
     author = models.ForeignKey(
         'auth.user',
-            #       on_delete=models.CASCADE,
-        on_delete=models.PROTECT       #   .SET_NULL,      #SINON TRY "=models.PROTECT"
+        # on_delete=models.PROTECT       #   .SET_NULL,      #SINON TRY "=models.PROTECT"
+        on_delete=models.CASCADE, null=True
     )
     body = models.TextField()
 
     def __str__(self) :
-        return self.title """
+        return self.title
+
