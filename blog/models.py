@@ -21,6 +21,10 @@ class BlogIndexPage(Page):
         context['blogpages'] = blogpages
         return context
 
+    content_panels = Page.content_panels + [
+        FieldPanel('intro', classname="full")
+    ]
+
 class BlogPageTag(TaggedItemBase):
     content_object = ParentalKey(
         'BlogPage',
@@ -34,11 +38,15 @@ class BlogPage(Page):
     body = RichTextField(blank=True)
     tags = ClusterTaggableManager(through=BlogPageTag, blank=True)
     author = models.ForeignKey(
-        'auth.user',
+        'auth.User',
         # on_delete=models.PROTECT       #   .SET_NULL,      #SINON TRY "=models.PROTECT"
         on_delete=models.SET_NULL, null=True
     )
-
+    content_panels = Page.content_panels + [
+        FieldPanel('date'),
+        FieldPanel('intro'),
+        FieldPanel('body', classname="full"),
+    ]
 
     def main_image(self):           # method
         gallery_item = self.gallery_images.first()
